@@ -21,6 +21,27 @@ class IniSection {
         line.value = value;
     }
 
+    getArray(key) {
+        let arrayKey = key + '[]';
+        return this.lines.filter(line => {
+            return line.key === arrayKey || line.key === key;
+        }).map(line => line.value);
+    }
+
+    setArray(key, array) {
+        let arrayKey = key + '[]',
+            startIndex = this.lines.findIndex(line => {
+                return line.key === arrayKey || line.key === key;
+            }),
+            arrayLines = array.map(value => {
+                return new IniLine(`${arrayKey}=${value}`)
+            });
+        this.lines = this.lines.filter(line => {
+            return line.key !== arrayKey && line.key !== key;
+        });
+        this.lines.splice(startIndex, 0, arrayLines);
+    }
+
     addLine(line) {
         let newLine = new IniLine(line);
         this.lines.push(newLine);
