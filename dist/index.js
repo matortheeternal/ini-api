@@ -1,5 +1,6 @@
 const sectionExpr = /^\[([^\]]*)\]/,
     lineExpr = /(^\s*[;#])|(^([^=;#]+)(?:=(.*))?$)/,
+    quotedExpr = /^\s*['"](.+)$/,
     commentedPairExpr = /^\s*(?:[;#]+([^=]+(=(.*))?))$/,
     lineBreak = typeof process !== 'undefined' &&
         process.platform === 'win32' ? '\r\n' : '\n',
@@ -19,8 +20,8 @@ const sectionExpr = /^\[([^\]]*)\]/,
 class IniLine {
     static _parse(str) {
         let value = '', comment = '', esc = false, out = false,
-            quoted = `'"`.includes(str[0]);
-        if (quoted) str = str.slice(1);
+            quoted = str.match(quotedExpr);
+        if (quoted) str = quoted[1];
         for (let char of str) {
             if (out) {
                 comment += char;
@@ -114,13 +115,35 @@ class IniSection {
     constructor(line) {
         this.lines = [];
         if (line === undefined) return;
+        if (typeof line !== 'string')
+            throw new Error('Input must be a string.');
         let match = line.match(sectionExpr);
         this.name = match && match[1];
         this.lines.push(new IniLine(line));
     }
 
+    addLine(line) {
+        let newLine = new IniLine(line);
+        this.lines.push(newLine);
+        return newLine;
+    }
+
+    addLines(lines) {
+        return lines.map(line => this.addLine(line));
+    }
+
     getLine(key) {
         return this.lines.find(line => line.key === key);
+    }
+
+    deleteLine(key) {
+        let index = this.lines.findIndex(line => line.key === key);
+        if (index === -1) return;
+        this.lines.splice(index, 1);
+    }
+
+    clear() {
+        this.lines = this.name ? this.lines.slice(0, 1) : [];
     }
 
     getValue(key) {
@@ -131,25 +154,25 @@ class IniSection {
     setValue(key, value) {
         let line = this.getLine(key) || this.addLine(`${key}=`);
         line.value = value;
+        return line;
     }
 
-    addLine(line) {
-        let newLine = new IniLine(line);
-        this.lines.push(newLine);
-        return newLine;
+    getArray(key) {
+        let arrayKey = key + '[]';
+        return this.lines.filter(line => {
+            return line.key === arrayKey || line.key === key;
+        }).map(line => line.value);
     }
 
-    addLines(lines) {
-        lines.forEach(line => this.addLine(line));
-    }
-
-    deleteLine(key) {
-        let index = this.lines.findIndex(line => line.key === key);
-        this.lines.splice(index, 1);
-    }
-
-    clear() {
-        this.lines = [];
+    setArray(key, array) {
+        let arrayKey = key + '[]',
+            arrayLines = array.map(value => {
+                return new IniLine(`${arrayKey}=${value}`)
+            });
+        this.lines = this.lines.filter(line => {
+            return line.key !== arrayKey && line.key !== key;
+        }).concat(arrayLines);
+        return arrayLines;
     }
 }
 
