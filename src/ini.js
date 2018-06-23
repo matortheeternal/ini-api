@@ -1,18 +1,24 @@
 class Ini {
     static merge(...inis) {
+        let mergeLines = (section, newSection) => {
+            section.lines.forEach(line => {
+                if (line.lineType === lineTypes.blank ||
+                    line.lineType === lineTypes.header) return;
+                let newLine = line.lineType === lineTypes.pair &&
+                    newSection.getLine(line.key) || newSection.addLine('');
+                newLine.text = line.text;
+            });
+        };
+
         return inis.reduce((newIni, ini) => {
+            mergeLines(ini.globals, newIni.globals);
             ini.sections.forEach(section => {
                 let newSection = newIni.getSection(section.name) ||
                     newIni.addSection(section.name);
-                section.lines.forEach(line => {
-                    let newLine = line.lineType === lineTypes.pair &&
-                        newSection.getLine(line.key) ||
-                        newSection.addLine('');
-                    newLine.text = line.text;
-                });
+                mergeLines(section, newSection);
             });
             return newIni;
-        }, newIni);
+        }, new Ini());
     }
 
     constructor(text = '') {

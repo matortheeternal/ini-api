@@ -1,4 +1,4 @@
-const sectionExpr = /^\[([^\]]*)\]/,
+const sectionExpr = /^\[(.*)\]/,
     commentExpr = /[;#](?: )?(.+)/,
     lineExpr = /(^\s*[;#])|(^\[[^\]]*\])|(^.+$)/,
     quotedExpr = /^(\s*['"]).+$/,
@@ -11,11 +11,12 @@ const sectionExpr = /^\[([^\]]*)\]/,
         pair: 3
     },
     reservedWords = {
-        true: true,
-        false: false,
-        null: null
+        "true": true,
+        "false": false,
+        "null": null
     },
-    isCommentLine = line => line.lineType === lineType.comment,
+    isBlankLine = line => line.lineType === lineTypes.blank,
+    isCommentLine = line => line.lineType === lineTypes.comment,
     isSectionLine = line => sectionExpr.test(line);
 
 // CLASSES

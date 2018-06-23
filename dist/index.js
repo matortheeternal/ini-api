@@ -1,4 +1,4 @@
-const sectionExpr = /^\[([^\]]*)\]/,
+const sectionExpr = /^\[(.*)\]/,
     commentExpr = /[;#](?: )?(.+)/,
     lineExpr = /(^\s*[;#])|(^\[[^\]]*\])|(^.+$)/,
     quotedExpr = /^(\s*['"]).+$/,
@@ -11,11 +11,12 @@ const sectionExpr = /^\[([^\]]*)\]/,
         pair: 3
     },
     reservedWords = {
-        true: true,
-        false: false,
-        null: null
+        "true": true,
+        "false": false,
+        "null": null
     },
-    isCommentLine = line => line.lineType === lineType.comment,
+    isBlankLine = line => line.lineType === lineTypes.blank,
+    isCommentLine = line => line.lineType === lineTypes.comment,
     isSectionLine = line => sectionExpr.test(line);
 
 // CLASSES
@@ -44,6 +45,10 @@ class IniLine {
         return [quoted ? value : value.trim(), comment.trim(), i + 1];
     }
 
+    static _escape(str) {
+        return str.replace(/[;#=\\]/g, match => `\\${match}`);
+    }
+
     constructor(text) {
         if (typeof text !== 'string')
             throw new Error('Input must be a string.');
@@ -54,7 +59,8 @@ class IniLine {
 
     _rebuildLine() {
         if (this.lineType === lineTypes.pair) {
-            this._text = `${this._key}=${this._value}`;
+            this._text = [this._key, this._value.toString()]
+                .map(IniLine._escape).join('=');
             if (this._comment) this._text += ` ; ${this._comment}`;
         } else {
             let newComment = this._comment ? `; ${this._comment}` : '',
@@ -205,19 +211,25 @@ class IniSection {
 
 class Ini {
     static merge(...inis) {
+        let mergeLines = (section, newSection) => {
+            section.lines.forEach(line => {
+                if (line.lineType === lineTypes.blank ||
+                    line.lineType === lineTypes.header) return;
+                let newLine = line.lineType === lineTypes.pair &&
+                    newSection.getLine(line.key) || newSection.addLine('');
+                newLine.text = line.text;
+            });
+        };
+
         return inis.reduce((newIni, ini) => {
+            mergeLines(ini.globals, newIni.globals);
             ini.sections.forEach(section => {
                 let newSection = newIni.getSection(section.name) ||
                     newIni.addSection(section.name);
-                section.lines.forEach(line => {
-                    let newLine = line.lineType === lineTypes.pair &&
-                        newSection.getLine(line.key) ||
-                        newSection.addLine('');
-                    newLine.text = line.text;
-                });
+                mergeLines(section, newSection);
             });
             return newIni;
-        }, newIni);
+        }, new Ini());
     }
 
     constructor(text = '') {
@@ -225,6 +237,7 @@ class Ini {
             throw new Error('Input must be a string.');
         this.sections = [];
         let currentSection = this._globals = new IniSection();
+        if (!text) return;
         text.split('\r\n').forEach(line => {
             if (isSectionLine(line)) {
                 currentSection = this.addSection(line, false);
@@ -266,8 +279,8 @@ class Ini {
             sections.unshift(this._globals);
         sections.forEach(section => {
             let lines = section.lines.filter(line => {
-                return !opts.removeBlankLines || line.text.trim() &&
-                    !opts.removeCommentLines || !isCommentLine(line);
+                return (!opts.removeBlankLines || !isBlankLine(line)) &&
+                    (!opts.removeCommentLines || !isCommentLine(line));
             }).map(line => line.text);
             if (!lines.length) return;
             let lastLine = lines[lines.length - 1];
