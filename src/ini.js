@@ -61,8 +61,8 @@ class Ini {
             sections.unshift(this._globals);
         sections.forEach(section => {
             let lines = section.lines.filter(line => {
-                return !opts.removeBlankLines || line.text.trim() &&
-                    !opts.removeCommentLines || !isCommentLine(line);
+                return (!opts.removeBlankLines || !isBlankLine(line)) &&
+                    (!opts.removeCommentLines || !isCommentLine(line));
             }).map(line => line.text);
             if (!lines.length) return;
             let lastLine = lines[lines.length - 1];
