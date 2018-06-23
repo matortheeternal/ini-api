@@ -1,22 +1,22 @@
 class IniSection {
-    constructor(line) {
+    constructor(text) {
         this.lines = [];
-        if (line === undefined) return;
-        if (typeof line !== 'string')
+        if (text === undefined) return;
+        if (typeof text !== 'string')
             throw new Error('Input must be a string.');
-        let match = line.match(sectionExpr);
+        let match = text.match(sectionExpr);
         this.name = match && match[1];
-        this.lines.push(new IniLine(line));
+        this.lines.push(new IniLine(text, !!match));
     }
 
-    addLine(line) {
-        let newLine = new IniLine(line);
+    addLine(text) {
+        let newLine = new IniLine(text);
         this.lines.push(newLine);
         return newLine;
     }
 
     addLines(lines) {
-        return lines.map(line => this.addLine(line));
+        return lines.map(text => this.addLine(text));
     }
 
     getLine(key) {

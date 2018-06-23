@@ -1,12 +1,14 @@
 const sectionExpr = /^\[([^\]]*)\]/,
-    lineExpr = /(^\s*[;#])|(^([^=;#]+)(?:=(.*))?$)/,
-    quotedExpr = /^\s*['"](.+)$/,
-    commentedPairExpr = /^\s*(?:[;#]+([^=]+(=(.*))?))$/,
+    commentExpr = /[;#](?: )?(.+)/,
+    lineExpr = /(^\s*[;#])|(^\[[^\]]*\])|(^.+$)/,
+    quotedExpr = /^(\s*['"]).+$/,
     lineBreak = typeof process !== 'undefined' &&
         process.platform === 'win32' ? '\r\n' : '\n',
     lineTypes = {
-        comment: 0,
-        pair: 1
+        blank: 0,
+        comment: 1,
+        header: 2,
+        pair: 3
     },
     reservedWords = {
         true: true,
@@ -24,5 +26,6 @@ const sectionExpr = /^\[([^\]]*)\]/,
 module.exports = {
     Ini: Ini,
     IniSection: IniSection,
-    IniLine: IniLine
+    IniLine: IniLine,
+    lineTypes: lineTypes
 };

@@ -25,7 +25,7 @@ describe('Ini', function() {
             expect(newIni.globals.name).toBeUndefined();
         });
 
-        it('should raise a useful exception if a non-string value is passed', function() {
+        it('should throw a useful exception if input is not a string', function() {
             expect(() => {
                 new Ini(false);
             }).toThrowError(/Input must be a string/);
@@ -43,7 +43,7 @@ describe('Ini', function() {
             it('should not mutate text when re-serialized', function() {
                 expect(foo.stringify()).toBe(text);
             });
-        })
+        });
     });
 
     describe('addSection', function() {
@@ -66,7 +66,7 @@ describe('Ini', function() {
 
         it('should support raw lines', function() {
             let text = '[section] ;with comment',
-                section = newIni.addSection(text, true);
+                section = newIni.addSection(text, false);
             expect(section).toBeDefined();
             expect(section.lines[0].text).toBe(text);
         });
@@ -125,7 +125,7 @@ describe('Ini', function() {
             newIni.clear();
             newIni.globals.addLines(globals);
             Object.keys(sections).forEach(key => {
-                let section = newIni.addSection(key, true),
+                let section = newIni.addSection(key, false),
                     lines = sections[key];
                 if (lines) section.addLines(lines);
             });

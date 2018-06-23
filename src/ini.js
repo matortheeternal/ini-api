@@ -22,7 +22,7 @@ class Ini {
         let currentSection = this._globals = new IniSection();
         text.split('\r\n').forEach(line => {
             if (isSectionLine(line)) {
-                currentSection = this.addSection(line, true);
+                currentSection = this.addSection(line, false);
             } else {
                 currentSection.addLine(line);
             }
@@ -37,9 +37,9 @@ class Ini {
         return this.sections.find(section => section.name === name);
     }
 
-    addSection(line, isLine = false) {
-        if (!isLine) line = `[${line}]`;
-        let newSection = new IniSection(line);
+    addSection(text, isName = true) {
+        if (isName) text = `[${text}]`;
+        let newSection = new IniSection(text);
         this.sections.push(newSection);
         return newSection;
     }

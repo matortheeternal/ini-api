@@ -46,7 +46,7 @@ describe('IniSection', function() {
             expect(fakeSection.lines[0].text).toBe('; [comment not header]');
         });
 
-        it('should raise a useful exception if a non-string value is passed', function() {
+        it('should throw a useful exception if input is not a string', function() {
             expect(() => {
                 new IniSection(false);
             }).toThrowError(/Input must be a string/);
