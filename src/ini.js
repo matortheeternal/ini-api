@@ -20,6 +20,7 @@ class Ini {
             throw new Error('Input must be a string.');
         this.sections = [];
         let currentSection = this._globals = new IniSection();
+        if (!text) return;
         text.split('\r\n').forEach(line => {
             if (isSectionLine(line)) {
                 currentSection = this.addSection(line, false);
