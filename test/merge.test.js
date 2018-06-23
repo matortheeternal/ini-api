@@ -12,6 +12,7 @@ describe('Ini.merge', function() {
     };
 
     beforeAll(function() {
+        process.platform = 'win32';
         let filenames = ['merge-1.ini', 'merge-2.ini', 'merge-3.ini'],
             inis = filenames.map(loadIni);
         mergedIni = Ini.merge(...inis);
