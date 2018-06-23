@@ -131,22 +131,52 @@ describe('Ini', function() {
             });
         });
 
+        let loadFixture = function(filename) {
+            let filePath = path.resolve(__dirname, `fixtures/${filename}`);
+            return fs.readFileSync(filePath, 'utf8');
+        };
+
         it('should serialize without mutation by default', function() {
-            let filePath = path.resolve(__dirname, './fixtures/bar.ini'),
-                text = fs.readFileSync(filePath, 'utf8');
+            let text = loadFixture('bar.ini');
             expect(newIni.stringify()).toBe(text);
         });
 
         describe('option: blankLineBeforeSection', function() {
-            // TODO
+            it('should add blank lines before sections missing one', function() {
+                let text = loadFixture('bar-blankLineBeforeSection.ini');
+                expect(newIni.stringify({
+                    blankLineBeforeSection: true
+                })).toBe(text);
+            });
         });
 
         describe('option: removeBlankLines', function() {
-            // TODO
+            it('should remove blank lines', function() {
+                let text = loadFixture('bar-removeBlankLines.ini');
+                expect(newIni.stringify({
+                    removeBlankLines: true
+                })).toBe(text);
+            });
         });
 
         describe('option: removeCommentLines', function() {
-            // TODO
+            it('should remove comment lines', function() {
+                let text = loadFixture('bar-removeCommentLines.ini');
+                expect(newIni.stringify({
+                    removeCommentLines: true
+                })).toBe(text);
+            });
+        });
+
+        describe('all options', function() {
+            it('should remove comment and blank lines, but add blank lines before sections', function() {
+                let text = loadFixture('bar-all.ini');
+                expect(newIni.stringify({
+                    blankLineBeforeSection: true,
+                    removeBlankLines: true,
+                    removeCommentLines: true
+                })).toBe(text);
+            });
         });
     });
 });
