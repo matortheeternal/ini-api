@@ -23,6 +23,10 @@ class IniLine {
         return [quoted ? value : value.trim(), comment.trim(), i + 1];
     }
 
+    static _escape(str) {
+        return str.replace(/[;#=\\]/g, match => `\\${match}`);
+    }
+
     constructor(text) {
         if (typeof text !== 'string')
             throw new Error('Input must be a string.');
@@ -33,7 +37,8 @@ class IniLine {
 
     _rebuildLine() {
         if (this.lineType === lineTypes.pair) {
-            this._text = `${this._key}=${this._value}`;
+            this._text = [this._key, this._value.toString()]
+                .map(IniLine._escape).join('=');
             if (this._comment) this._text += ` ; ${this._comment}`;
         } else {
             let newComment = this._comment ? `; ${this._comment}` : '',
