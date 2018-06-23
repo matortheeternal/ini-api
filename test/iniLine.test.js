@@ -167,6 +167,20 @@ describe('IniLine', function() {
             it('should set _comment to an empty string if not provided', function() {
                 testLine('a=b', 'a', 'b', '');
             });
+
+            describe('reserved words', function() {
+                it('should handle null', function() {
+                    testLine('a=null', 'a', null, '');
+                });
+
+                it('should handle true', function() {
+                    testLine('a=true', 'a', true, '');
+                });
+
+                it('should handle false', function() {
+                    testLine('a=false', 'a', false, '');
+                });
+            });
         });
     });
 
@@ -300,6 +314,32 @@ describe('IniLine', function() {
 
         it('should update lineType', function() {
             expect(line.lineType).toBe(lineTypes.blank);
+        });
+    });
+
+    describe('escaping when setting key/value', function() {
+        let line;
+
+        beforeAll(function() {
+            line = new IniLine('a=b ; comment')
+        });
+
+        it('should escape comment characters', function() {
+            line.key = 'a#';
+            line.value = '#b';
+            expect(line._text).toBe('a\\#=\\#b ; comment');
+        });
+
+        it('should escape equals sign', function() {
+            line.key = 'a=';
+            line.value = '=b';
+            expect(line._text).toBe('a\\==\\=b ; comment');
+        });
+
+        it('should escape backslash', function() {
+            line.key = 'a\\';
+            line.value = '\\b';
+            expect(line._text).toBe('a\\\\=\\\\b ; comment');
         });
     });
 });
