@@ -20,6 +20,7 @@
     "test": "jest --bail"
   },
   "devDependencies": {
+    "codecov": "^3.0.2",
     "gulp": "^3.9.1",
     "gulp-batch": "^1.0.5",
     "gulp-clean": "^0.3.2",
