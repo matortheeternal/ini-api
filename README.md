@@ -37,7 +37,7 @@ A clean class-based API for parsing, editing, and creating INI files.
 # Installation & usage
 
 ```
-npm i matortheeternal/ini-api
+npm i ini-api
 ```
 
 ```javascript

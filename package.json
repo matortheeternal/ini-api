@@ -6,6 +6,7 @@
   "homepage": "https://github.com/matortheeternal/ini-parser",
   "license": "MIT",
   "main": "./dist/index.js",
+  "keywords": ["ini", "stringify", "parse", "config"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matortheeternal/ini-parser.git"
