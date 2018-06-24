@@ -1,5 +1,5 @@
-# ini-parser ![](https://travis-ci.org/matortheeternal/ini-parser.svg?branch=master) [![codecov](https://codecov.io/gh/matortheeternal/ini-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/matortheeternal/ini-parser)
-Node module which provides a clean class-based API for parsing, editing, and creating INI files. 
+# ini-api ![](https://travis-ci.org/matortheeternal/ini-parser.svg?branch=master) [![codecov](https://codecov.io/gh/matortheeternal/ini-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/matortheeternal/ini-parser)
+A clean class-based API for parsing, editing, and creating INI files. 
 
 # Table of contents
 
@@ -37,11 +37,11 @@ Node module which provides a clean class-based API for parsing, editing, and cre
 # Installation & usage
 
 ```
-npm i matortheeternal/ini-parser
+npm i matortheeternal/ini-api
 ```
 
 ```javascript
-let {Ini, IniSection, IniLine, lineTypes} = require('ini-parser');
+let {Ini, IniSection, IniLine, lineTypes} = require('ini-api');
 let myIni = new Ini('; ini text here');
 ```
 

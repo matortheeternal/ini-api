@@ -1,6 +1,6 @@
 {
-  "name": "ini-parser",
-  "description": "A simple INI parser and editor.",
+  "name": "ini-api",
+  "description": "A clean class-based API for parsing, editing, and creating INI files.",
   "version": "1.0.0",
   "author": "Mator",
   "homepage": "https://github.com/matortheeternal/ini-parser",
