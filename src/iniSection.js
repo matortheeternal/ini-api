@@ -1,12 +1,12 @@
 class IniSection {
-    constructor(text) {
+    constructor(text = '') {
         this.lines = [];
-        if (text === undefined) return;
         if (typeof text !== 'string')
             throw new Error('Input must be a string.');
+        if (text.length === 0) return;
         let match = text.match(sectionExpr);
         this.name = match && match[1];
-        this.lines.push(new IniLine(text, !!match));
+        this.lines.push(new IniLine(text));
     }
 
     addLine(text) {
@@ -35,7 +35,7 @@ class IniSection {
 
     getValue(key) {
         let line = this.getLine(key);
-        return line && line.value;
+        if (line) return line.value;
     }
 
     setValue(key, value) {

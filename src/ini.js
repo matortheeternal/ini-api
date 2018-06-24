@@ -1,12 +1,20 @@
 class Ini {
     static merge(...inis) {
         let mergeLines = (section, newSection) => {
+            let arrayKeys = [];
             section.lines.forEach(line => {
                 if (line.lineType === lineTypes.blank ||
                     line.lineType === lineTypes.header) return;
+                if (line.key && line.key.endsWith('[]'))
+                    return arrayKeys.includes(line.key) ||
+                        arrayKeys.push(line.key);
                 let newLine = line.lineType === lineTypes.pair &&
                     newSection.getLine(line.key) || newSection.addLine('');
                 newLine.text = line.text;
+            });
+            arrayKeys.forEach(arrayKey => {
+                let key = arrayKey.slice(0, -2);
+                newSection.setArray(key, section.getArray(key));
             });
         };
 
@@ -25,28 +33,24 @@ class Ini {
         if (typeof text !== 'string')
             throw new Error('Input must be a string.');
         this.sections = [];
-        let currentSection = this._globals = new IniSection();
-        if (!text) return;
+        let currentSection = this.globals = new IniSection();
+        if (text.length === 0) return;
         text.split(lineBreak).forEach(line => {
             if (isSectionLine(line)) {
-                currentSection = this.addSection(line, false);
+                currentSection = new IniSection(line);
+                this.sections.push(currentSection);
             } else {
                 currentSection.addLine(line);
             }
         });
     }
 
-    get globals() {
-        return this._globals;
-    }
-
     getSection(name) {
         return this.sections.find(section => section.name === name);
     }
 
-    addSection(text, isName = true) {
-        if (isName) text = `[${text}]`;
-        let newSection = new IniSection(text);
+    addSection(name) {
+        let newSection = new IniSection(`[${name}]`);
         this.sections.push(newSection);
         return newSection;
     }
@@ -57,27 +61,28 @@ class Ini {
     }
 
     clear() {
-        this._globals = new IniSection();
+        this.globals = new IniSection();
         this.sections = [];
     }
 
-    stringify(opts = {}) {
+    stringify(options = {}) {
         let str = '',
             sections = this.sections.slice();
-        if (this._globals.lines.length > 0)
-            sections.unshift(this._globals);
-        sections.forEach(section => {
+        if (this.globals.lines.length > 0)
+            sections.unshift(this.globals);
+        sections.forEach((section, index) => {
             let lines = section.lines.filter(line => {
-                return (!opts.removeBlankLines || !isBlankLine(line)) &&
-                    (!opts.removeCommentLines || !isCommentLine(line));
+                return (!options.removeBlankLines || !isBlankLine(line)) &&
+                    (!options.removeCommentLines || !isCommentLine(line));
             }).map(line => line.text);
             if (!lines.length) return;
-            let lastLine = lines[lines.length - 1];
             str += lines.join(lineBreak);
-            if (opts.blankLineBeforeSection && !!lastLine.trim())
+            if (index === sections.length - 1) return;
+            let lastLine = lines[lines.length - 1];
+            if (options.blankLineBeforeSection && !!lastLine.trim())
                 str += lineBreak;
             str += lineBreak;
         });
-        return str.slice(0, 0 - lineBreak.length);
+        return str;
     }
 }

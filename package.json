@@ -5,6 +5,7 @@
   "author": "Mator",
   "homepage": "https://github.com/matortheeternal/ini-parser",
   "license": "MIT",
+  "main": "./dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matortheeternal/ini-parser.git"

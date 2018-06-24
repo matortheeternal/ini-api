@@ -63,13 +63,6 @@ describe('Ini', function() {
             expect(newIni.sections.length).toBe(numSections + 1);
             expect(newIni.sections[numSections]).toBe(newSection);
         });
-
-        it('should support raw lines', function() {
-            let text = '[section] ;with comment',
-                section = newIni.addSection(text, false);
-            expect(section).toBeDefined();
-            expect(section.lines[0].text).toBe(text);
-        });
     });
 
     describe('getSection', function() {
@@ -87,7 +80,7 @@ describe('Ini', function() {
     describe('deleteSection', function() {
         it('should delete the section if present', function() {
             let numSections = newIni.sections.length;
-            newIni.deleteSection('section');
+            newIni.deleteSection('new section');
             expect(newIni.sections.length).toEqual(numSections - 1);
         });
 
@@ -125,9 +118,10 @@ describe('Ini', function() {
             newIni.clear();
             newIni.globals.addLines(globals);
             Object.keys(sections).forEach(key => {
-                let section = newIni.addSection(key, false),
+                let section = new IniSection(key),
                     lines = sections[key];
                 if (lines) section.addLines(lines);
+                newIni.sections.push(section);
             });
         });
 

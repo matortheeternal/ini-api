@@ -44,9 +44,15 @@ describe('Ini.merge', function() {
         expect(section3.getValue('2+2')).toBe('4');
     });
 
+    it('should merge arrays', function() {
+        let section1 = mergedIni.sections[0],
+            things = section1.getArray('things');
+        expect(things).toEqual(['basket', 'bat']);
+    });
+
     it('should ignore blank lines', function() {
         let [section1, section2, section3] = mergedIni.sections;
-        expect(section1.lines.length).toBe(4);
+        expect(section1.lines.length).toBe(6);
         expect(section2.lines.length).toBe(3);
         expect(section3.lines.length).toBe(3);
     });
