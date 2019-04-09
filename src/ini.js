@@ -30,9 +30,9 @@ class Ini {
     }
 
     constructor(text = '', lineBreak) {
-        this.lineBreak = lineBreak || this.determineLineBreak(text)
         if (typeof text !== 'string')
             throw new Error('Input must be a string.');
+        this.lineBreak = lineBreak || this.determineLineBreak(text)
         this.sections = [];
         let currentSection = this.globals = new IniSection();
         if (text.length === 0) return;

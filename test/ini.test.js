@@ -173,4 +173,22 @@ describe('Ini', function() {
             });
         });
     });
+
+    describe('linebreak', function() {
+        it('should accept linebreak', () => {
+            const newIni = new Ini('[x]\r\nb=3', '\r\n')
+            expect(newIni.sections[0].lines.length).toBe(2)
+
+            const newIni2 = new Ini('[x]\nb=3', '\r\n')
+            expect(newIni2.sections[0].lines.length).toBe(1)
+        })
+
+        it('should determind linebreak by text', () => {
+            const newIni = new Ini('[x]\r\nb=3')
+            expect(newIni.sections[0].lines.length).toBe(2)
+
+            const newIni2 = new Ini('[x]\nb=3')
+            expect(newIni2.sections[0].lines.length).toBe(2)
+        })
+    }) 
 });

@@ -2,8 +2,6 @@ const sectionExpr = /^\[(.*)\]/,
     commentExpr = /[;#](?: )?(.+)/,
     lineExpr = /(^\s*[;#])|(^\[[^\]]*\])|(^.+$)/,
     quotedExpr = /^(\s*['"]).+$/,
-    lineBreak = typeof process !== 'undefined' &&
-        process.platform === 'win32' ? '\r\n' : '\n',
     lineTypes = {
         blank: 0,
         comment: 1,
@@ -240,13 +238,14 @@ class Ini {
         }, new Ini());
     }
 
-    constructor(text = '') {
+    constructor(text = '', lineBreak) {
         if (typeof text !== 'string')
             throw new Error('Input must be a string.');
+        this.lineBreak = lineBreak || this.determineLineBreak(text)
         this.sections = [];
         let currentSection = this.globals = new IniSection();
         if (text.length === 0) return;
-        text.split(lineBreak).forEach(line => {
+        text.split(this.lineBreak).forEach(line => {
             if (isSectionLine(line)) {
                 currentSection = new IniSection(line);
                 this.sections.push(currentSection);
@@ -254,6 +253,26 @@ class Ini {
                 currentSection.addLine(line);
             }
         });
+    }
+
+    determineLineBreak(text) {
+        if(text === '') {
+            return typeof process !== 'undefined' &&
+                process.platform === 'win32' ? '\r\n' : '\n'
+        } else {
+            let lineBreak
+            if(['\r\n', '\n'].some((t) => {
+                if (text.split(t).length > 1) {
+                    lineBreak = t
+                    return true
+                }
+            })) {
+                return lineBreak
+            } else {
+                return typeof process !== 'undefined' &&
+                    process.platform === 'win32' ? '\r\n' : '\n'
+            }
+        }
     }
 
     getSection(name) {
@@ -287,12 +306,12 @@ class Ini {
                     (!options.removeCommentLines || !isCommentLine(line));
             }).map(line => line.text);
             if (!lines.length) return;
-            str += lines.join(lineBreak);
+            str += lines.join(this.lineBreak);
             if (index === sections.length - 1) return;
             let lastLine = lines[lines.length - 1];
             if (options.blankLineBeforeSection && !!lastLine.trim())
-                str += lineBreak;
-            str += lineBreak;
+                str += this.lineBreak;
+            str += this.lineBreak;
         });
         return str;
     }
