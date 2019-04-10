@@ -190,5 +190,11 @@ describe('Ini', function() {
             const newIni2 = new Ini('[x]\nb=3')
             expect(newIni2.sections[0].lines.length).toBe(2)
         })
+
+        it('should determind linebreak by system when by text fail', () => {
+            const newIni = new Ini('[x]=3')
+            const linebreak = process.platform === 'win32' ? '\r\n' : '\n'
+            expect(newIni.lineBreak).toBe(linebreak)
+        })
     }) 
 });
