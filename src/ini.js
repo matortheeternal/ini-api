@@ -1,4 +1,5 @@
-const systemLineBreak = process && process.platform === 'win32' ? '\r\n' : '\n';
+const {lineTypes, systemLineBreak} = require('./helpers');
+const IniSection = require('./IniSection');
 
 class Ini {
     static merge(...inis) {
@@ -95,3 +96,5 @@ class Ini {
         return str;
     }
 }
+
+module.exports = Ini;

@@ -1,4 +1,4 @@
-let {IniSection, IniLine} = require('../dist');
+let {IniSection, IniLine} = require('..');
 
 describe('IniSection', function() {
     let emptySection, newSection, fakeSection, newLine;

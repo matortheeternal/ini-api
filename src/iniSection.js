@@ -1,3 +1,6 @@
+const {sectionExpr} = require('./helpers');
+const IniLine = require('./iniLine');
+
 class IniSection {
     constructor(text = '') {
         this.lines = [];
@@ -62,3 +65,5 @@ class IniSection {
         return arrayLines;
     }
 }
+
+module.exports = IniSection;

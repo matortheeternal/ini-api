@@ -1,3 +1,7 @@
+const {
+    quotedExpr, lineTypes, commentExpr, reservedWords
+} = require('./helpers');
+
 class IniLine {
     static _parse(str) {
         let value = '', comment = '', esc = false, inComment = false,
@@ -121,3 +125,5 @@ class IniLine {
         this._parseLine();
     }
 }
+
+module.exports = IniLine;

@@ -207,6 +207,8 @@ class IniSection {
     }
 }
 
+const systemLineBreak = process && process.platform === 'win32' ? '\r\n' : '\n';
+
 class Ini {
     static merge(...inis) {
         let mergeLines = (section, newSection) => {
@@ -241,7 +243,7 @@ class Ini {
     constructor(text = '', lineBreak) {
         if (typeof text !== 'string')
             throw new Error('Input must be a string.');
-        this.lineBreak = lineBreak || this.determineLineBreak(text)
+        this.lineBreak = lineBreak || this.determineLineBreak(text);
         this.sections = [];
         let currentSection = this.globals = new IniSection();
         if (text.length === 0) return;
@@ -256,23 +258,9 @@ class Ini {
     }
 
     determineLineBreak(text) {
-        if(text === '') {
-            return typeof process !== 'undefined' &&
-                process.platform === 'win32' ? '\r\n' : '\n'
-        } else {
-            let lineBreak
-            if(['\r\n', '\n'].some((t) => {
-                if (text.split(t).length > 1) {
-                    lineBreak = t
-                    return true
-                }
-            })) {
-                return lineBreak
-            } else {
-                return typeof process !== 'undefined' &&
-                    process.platform === 'win32' ? '\r\n' : '\n'
-            }
-        }
+        return ['\r\n', '\n'].find(lineBreak => {
+            return text.includes(lineBreak);
+        }) || systemLineBreak;
     }
 
     getSection(name) {

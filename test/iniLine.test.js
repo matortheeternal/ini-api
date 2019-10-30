@@ -1,4 +1,4 @@
-let {IniLine, lineTypes} = require('../dist');
+let {IniLine, lineTypes} = require('..');
 
 describe('IniLine', function() {
     describe('new', function() {
@@ -135,7 +135,7 @@ describe('IniLine', function() {
             it('should set _comment', function() {
                 expect(line._comment).toBe('comment');
             });
-            
+
             it('should ignore unquoted whitespace', function() {
                 testLine('\t a  =  b    ;   comment   ', 'a', 'b', 'comment');
             });

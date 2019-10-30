@@ -1,4 +1,4 @@
-let {Ini, IniSection} = require('../dist'),
+let {Ini, IniSection} = require('..'),
     path = require('path'),
     fs = require('fs');
 
