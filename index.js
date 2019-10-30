@@ -2,8 +2,6 @@ const sectionExpr = /^\[(.*)\]/,
     commentExpr = /[;#](?: )?(.+)/,
     lineExpr = /(^\s*[;#])|(^\[[^\]]*\])|(^.+$)/,
     quotedExpr = /^(\s*['"]).+$/,
-    lineBreak = typeof process !== 'undefined' &&
-        process.platform === 'win32' ? '\r\n' : '\n',
     lineTypes = {
         blank: 0,
         comment: 1,
