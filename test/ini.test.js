@@ -44,6 +44,32 @@ describe('Ini', function() {
                 expect(foo.stringify()).toBe(text);
             });
         });
+
+        describe('line break parameter', function() {
+            it('should use parameter if passed', () => {
+                let newIni = new Ini('[x]\r\nb=3', '\r\n');
+                expect(newIni.sections[0].lines.length).toBe(2);
+
+                let newIni2 = new Ini('[x]\nb=3', '\r\n');
+                expect(newIni2.sections[0].lines.length).toBe(1);
+            });
+
+            describe('not passed', () => {
+                it('should determine from text', () => {
+                    let newIni = new Ini('[x]\r\nb=3');
+                    expect(newIni.sections[0].lines.length).toBe(2);
+
+                    let newIni2 = new Ini('[x]\nb=3');
+                    expect(newIni2.sections[0].lines.length).toBe(2);
+                });
+
+                it('should determine by system if cannot determine by text', () => {
+                    let newIni = new Ini('[x]=3');
+                    let linebreak = process.platform === 'win32' ? '\r\n' : '\n';
+                    expect(newIni.lineBreak).toBe(linebreak);
+                });
+            });
+        });
     });
 
     describe('addSection', function() {
@@ -173,28 +199,4 @@ describe('Ini', function() {
             });
         });
     });
-
-    describe('linebreak', function() {
-        it('should accept linebreak', () => {
-            const newIni = new Ini('[x]\r\nb=3', '\r\n')
-            expect(newIni.sections[0].lines.length).toBe(2)
-
-            const newIni2 = new Ini('[x]\nb=3', '\r\n')
-            expect(newIni2.sections[0].lines.length).toBe(1)
-        })
-
-        it('should determind linebreak by text', () => {
-            const newIni = new Ini('[x]\r\nb=3')
-            expect(newIni.sections[0].lines.length).toBe(2)
-
-            const newIni2 = new Ini('[x]\nb=3')
-            expect(newIni2.sections[0].lines.length).toBe(2)
-        })
-
-        it('should determind linebreak by system when by text fail', () => {
-            const newIni = new Ini('[x]=3')
-            const linebreak = process.platform === 'win32' ? '\r\n' : '\n'
-            expect(newIni.lineBreak).toBe(linebreak)
-        })
-    }) 
 });
