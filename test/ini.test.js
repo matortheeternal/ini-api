@@ -12,7 +12,7 @@ describe('Ini', function() {
     describe('new', function() {
         it('should create an instance of the Ini class', function() {
             expect(newIni).toBeDefined();
-            expect(newIni.constructor).toBe(Ini);
+            expect(newIni).toBeInstanceOf(Ini);
         });
 
         it('should initialize the sections array', function() {
@@ -21,7 +21,7 @@ describe('Ini', function() {
 
         it('should create globals section', function() {
             expect(newIni.globals).toBeDefined();
-            expect(newIni.globals.constructor).toBe(IniSection);
+            expect(newIni.globals).toBeInstanceOf(IniSection);
             expect(newIni.globals.name).toBeUndefined();
         });
 
@@ -82,7 +82,7 @@ describe('Ini', function() {
 
         it('should return the created section', function() {
             expect(newSection).toBeDefined();
-            expect(newSection.constructor).toBe(IniSection);
+            expect(newSection).toBeInstanceOf(IniSection);
         });
 
         it('should add section to sections array', function() {

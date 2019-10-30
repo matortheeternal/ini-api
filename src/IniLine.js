@@ -1,5 +1,5 @@
 const {
-    quotedExpr, lineTypes, commentExpr, reservedWords
+    quotedExpr, lineTypes, commentExpr, lineExpr, reservedWords
 } = require('./helpers');
 
 class IniLine {

@@ -1,8 +1,8 @@
 const {lineTypes} =  require('./src/helpers');
 
 module.exports = {
-    Ini: require('./src/ini'),
-    IniSection: require('./src/iniSection'),
-    IniLine: require('./src/iniLine'),
+    IniLine: require('./src/IniLine'),
+    IniSection: require('./src/IniSection'),
+    Ini: require('./src/Ini'),
     lineTypes: lineTypes
 };

@@ -12,7 +12,7 @@ describe('IniSection', function() {
     describe('new', function() {
         it('should create an instance of the IniSection class', function() {
             expect(emptySection).toBeDefined();
-            expect(emptySection.constructor).toBe(IniSection);
+            expect(emptySection).toBeInstanceOf(IniSection);
         });
 
         it('should initialize the lines array', function() {
@@ -63,7 +63,7 @@ describe('IniSection', function() {
 
         it('should return the created line', function() {
             expect(newLine).toBeDefined();
-            expect(newLine.constructor).toBe(IniLine);
+            expect(newLine).toBeInstanceOf(IniLine);
         });
 
         it('should add an line to lines array', function() {
@@ -82,7 +82,7 @@ describe('IniSection', function() {
 
         it('should return the created lines', function() {
             expect(newLines).toBeDefined();
-            expect(newLines.constructor).toBe(Array);
+            expect(newLines).toBeInstanceOf(Array);
             expect(newLines.length).toBe(4);
         });
 
@@ -159,13 +159,13 @@ describe('IniSection', function() {
 
         it('should set value and return line if key is present', function() {
             expect(line).toBeDefined();
-            expect(line.constructor).toBe(IniLine);
+            expect(line).toBeInstanceOf(IniLine);
             expect(line.value).toBe('123');
         });
 
         it('should add line and return it if key is not present', function() {
             expect(newLine).toBeDefined();
-            expect(newLine.constructor).toBe(IniLine);
+            expect(newLine).toBeInstanceOf(IniLine);
             expect(newLine.value).toBe('world');
         });
     });
@@ -180,7 +180,7 @@ describe('IniSection', function() {
         it('should return array if present', function() {
             let a = newSection.getArray('a');
             expect(a).toBeDefined();
-            expect(a.constructor).toBe(Array);
+            expect(a).toBeInstanceOf(Array);
             expect(a.length).toBe(4);
             for (let i = 0; i < a.length; i++)
                 expect(a[i]).toBe(`${i + 1}`);
@@ -189,7 +189,7 @@ describe('IniSection', function() {
         it('should treat repeating non-array keys as array', function() {
             let b = newSection.getArray('b');
             expect(b).toBeDefined();
-            expect(b.constructor).toBe(Array);
+            expect(b).toBeInstanceOf(Array);
             expect(b.length).toBe(4);
             for (let i = 0; i < b.length; i++)
                 expect(b[i]).toBe(`${i + 1}`);
@@ -198,7 +198,7 @@ describe('IniSection', function() {
         it('should return an empty array if key not present', function() {
             let c = newSection.getArray('c');
             expect(c).toBeDefined();
-            expect(c.constructor).toBe(Array);
+            expect(c).toBeInstanceOf(Array);
             expect(c.length).toBe(0);
         });
     });
@@ -214,7 +214,7 @@ describe('IniSection', function() {
 
         it('should create array lines and and return them if not present', function() {
             expect(lines).toBeDefined();
-            expect(lines.constructor).toBe(Array);
+            expect(lines).toBeInstanceOf(Array);
             expect(lines.length).toBe(3);
             expect(newSection.lines.length).toBe(numLines + 3);
             for (let i = 0; i < lines.length; i++)
@@ -225,7 +225,7 @@ describe('IniSection', function() {
             let chars = ['a', 'b', 'c'];
             lines = newSection.setArray('a', chars);
             expect(lines).toBeDefined();
-            expect(lines.constructor).toBe(Array);
+            expect(lines).toBeInstanceOf(Array);
             expect(lines.length).toBe(3);
             expect(newSection.lines.length).toBe(numLines + 3);
             for (let i = 0; i < lines.length; i++)

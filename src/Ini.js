@@ -1,4 +1,6 @@
-const {lineTypes, systemLineBreak} = require('./helpers');
+const {
+    lineTypes, systemLineBreak, isBlankLine, isCommentLine, isSectionLine
+} = require('./helpers');
 const IniSection = require('./IniSection');
 
 class Ini {

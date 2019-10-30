@@ -1,5 +1,5 @@
 const {sectionExpr} = require('./helpers');
-const IniLine = require('./iniLine');
+const IniLine = require('./IniLine');
 
 class IniSection {
     constructor(text = '') {
