@@ -42,8 +42,19 @@ A clean class-based API for parsing, editing, and creating INI files.
 npm i ini-api
 ```
 
+Note: As of v2.0.1, this library ships with both ESM and CommonJS builds. Use whichever import style matches your project.
+
+### Using ES modules (recommended)
+```js
+import { Ini, IniSection, IniLine, lineTypes } from 'ini-api';
+
+const myIni = new Ini('; ini text here');
+```
+
+### Using CommonJS
+
 ```javascript
-let {Ini, IniSection, IniLine, lineTypes} = require('ini-api');
+let { Ini, IniSection, IniLine, lineTypes } = require('ini-api');
 let myIni = new Ini('; ini text here');
 ```
 
@@ -64,20 +75,19 @@ The new Ini.
 
 **examples:**
 ```javascript
+import { Ini } from 'ini-api';
+import fs from 'fs';
+import path from 'path';
+
 // creates an empty Ini file
-let emptyIni = new Ini();
+const emptyIni = new Ini();
 
 // creates an ini file with a section named "section"
-let newIni = new Ini('[section]\r\na=b\r\n; comment');
+const newIni = new Ini('[section]\r\na=b\r\n; comment');
 
 // loading an ini file from disk
-let fs = require('fs'),
-    path = require('path');
-
-let filePath = path.resolve(__dirname, 'config.ini'),
-    text = fs.readFileSync(filePath);
-
-let configIni = new Ini(text);
+const text = fs.readFileSync('config.ini');
+const configIni = new Ini(text);
 ```
 
 ### `getSection(name)`
@@ -159,10 +169,10 @@ The new merged Ini.
 
 **examples:**  
 ```javascript
-let ini1 = new Ini('[section]\r\na=b\r\n\r\n; comment'),
-    ini2 = new Ini('[section]\r\n\r\na=c\r\n'),
-    ini3 = new Ini('; global comment\r\n\r\n[section 2]\r\nhello=world');
-let mergedIni = Ini.merge(ini1, ini2, ini3);
+const ini1 = new Ini('[section]\r\na=b\r\n\r\n; comment');
+const ini2 = new Ini('[section]\r\n\r\na=c\r\n');
+const ini3 = new Ini('; global comment\r\n\r\n[section 2]\r\nhello=world');
+const mergedIni = Ini.merge(ini1, ini2, ini3);
 console.log(mergedIni.stringify());
 /*
 ; global comment
@@ -191,10 +201,10 @@ The new IniSection.
 **examples:**
 ```javascript
 // creates an empty IniSection with no name or lines
-let emptySection = new IniSection('');
+const emptySection = new IniSection('');
 
 // creates a section named "section"
-let section = new IniSection('[section]');
+const section = new IniSection('[section]');
 ```
 
 ### `addLine(text)`
@@ -282,7 +292,7 @@ The value of the IniLine if present.  Returns undefined if a matching line wasn'
 
 **examples:**  
 ```javascript
-let section = new IniSection('[section]');
+const section = new IniSection('[section]');
 section.addLine('a=b');
 section.getValue('a'); // returns b
 ```
@@ -300,7 +310,7 @@ The matching IniLine if present.  Returns undefined if a matching line wasn't fo
 
 **examples:**  
 ```javascript
-let section = new IniSection('[section]');
+const section = new IniSection('[section]');
 section.addLine('a=b');
 section.getValue('a'); // returns b
 ```
@@ -317,7 +327,7 @@ An array of the values found.  Returns an empty array if no matching lines were 
 
 **examples:**  
 ```javascript
-let section = new IniSection('[section]');
+const section = new IniSection('[section]');
 section.addLines(['a[]=1', 'a[]=2', 'a[]=3']);
 section.getArray('a'); // returns [1, 2, 3]
 ```
@@ -335,7 +345,7 @@ An array of the created IniLines.
 
 **examples:**  
 ```javascript
-let section = new IniSection('[section]');
+const section = new IniSection('[section]');
 section.addLines(['a[]=1', 'a[]=2', 'a[]=3']);
 section.setArray('a', [9, 8, 7]);
 section.getArray('a'); // returns [9, 8, 7]
@@ -357,10 +367,10 @@ The new IniLine.
 
 **examples:**
 ```javascript
-let blankLine = new IniLine('');
-let commentLine = new IniLine('; comment');
-let headerLine = new IniLine('[header]');
-let pairLine = new IniLine('key = value ; comment');
+const blankLine = new IniLine('');
+const commentLine = new IniLine('; comment');
+const headerLine = new IniLine('[header]');
+const pairLine = new IniLine('key = value ; comment');
 ```
 
 ### `key`
@@ -369,7 +379,7 @@ Getter/setter for line key.  Note: attempting to set the key of a line that does
 
 **examples:**  
 ```javascript
-let line = new IniLine('a=b ; comment')
+const line = new IniLine('a=b ; comment')
 console.log(line.key); // output: 'a'
 line.key = 'new key';
 console.log(line.text); // output: new key=b ; comment
@@ -381,7 +391,7 @@ Getter/setter for line value.  Note: attempting to set the value of a line that 
 
 **examples:**  
 ```javascript
-let line = new IniLine('a=b ; comment')
+const line = new IniLine('a=b ; comment')
 console.log(line.value); // output: 'b'
 line.value = 'new value';
 console.log(line.text); // output: a=new value ; comment
@@ -393,7 +403,7 @@ Getter/setter for line comment.  Set to an empty string to remove a comment from
 
 **examples:**  
 ```javascript
-let line = new IniLine('a=b ; comment')
+const line = new IniLine('a=b ; comment')
 console.log(line.comment); // output: 'comment'
 line.comment = 'new comment';
 console.log(line.text); // output: a=b ; new comment
@@ -405,7 +415,7 @@ Getter/setter for line text.
 
 **examples:**  
 ```javascript
-let line = new IniLine('a=b ; comment')
+const line = new IniLine('a=b ; comment')
 console.log(line.text); // output: 'a=b ; comment'
 line.text = 'new=text ; here';
 ```
