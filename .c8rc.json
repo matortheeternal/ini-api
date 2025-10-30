@@ -1,0 +1,10 @@
+{
+  "reporter": ["lcov", "text"],
+  "report-dir": "./coverage",
+  "exclude": [
+    "tests/**",
+    "node_modules/**"
+  ],
+  "check-coverage": false,
+  "skip_empty": true
+}

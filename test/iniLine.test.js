@@ -1,11 +1,11 @@
-let {IniLine, lineTypes} = require('..');
+import { IniLine, lineTypes } from '../src/index.js';
 
 describe('IniLine', function() {
     describe('new', function() {
         it('should throw a useful exception if input is not a string', function() {
             expect(() => {
                 new IniLine(false);
-            }).toThrow(/Input must be a string/);
+            }).toThrowError(/Input must be a string/);
         });
 
         describe('blank line', function() {
@@ -217,7 +217,7 @@ describe('IniLine', function() {
             expect(() => {
                 let line = new IniLine('');
                 line.key = 'key';
-            }).toThrow(/Cannot set key for a non-pair line/);
+            }).toThrowError(/Cannot set key for a non-pair line/);
         });
     });
 
@@ -253,7 +253,7 @@ describe('IniLine', function() {
             expect(() => {
                 let line = new IniLine('');
                 line.value = 'value';
-            }).toThrow(/Cannot set value for a non-pair line/);
+            }).toThrowError(/Cannot set value for a non-pair line/);
         });
     });
 

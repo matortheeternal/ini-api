@@ -1,6 +1,10 @@
-let {Ini, IniSection} = require('..'),
-    path = require('path'),
-    fs = require('fs');
+import { Ini, IniSection } from '../src/index.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('Ini', function() {
     let newIni, newSection;

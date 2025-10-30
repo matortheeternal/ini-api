@@ -1,4 +1,6 @@
-# ini-api ![](https://travis-ci.org/matortheeternal/ini-api.svg?branch=master) [![codecov](https://codecov.io/gh/matortheeternal/ini-api/branch/master/graph/badge.svg)](https://codecov.io/gh/matortheeternal/ini-api)
+# ini-api 
+[![Tests](https://github.com/matortheeternal/ini-api/actions/workflows/tests.yml/badge.svg)](https://github.com/matortheeternal/ini-api/actions/workflows/tests.yml) [![codecov](https://codecov.io/gh/matortheeternal/ini-api/branch/master/graph/badge.svg)](https://codecov.io/gh/matortheeternal/ini-api)
+
 A clean class-based API for parsing, editing, and creating INI files. 
 
 # Table of contents

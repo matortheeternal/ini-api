@@ -1,4 +1,4 @@
-let {IniSection, IniLine} = require('..');
+import { IniSection, IniLine } from '../src/index.js';
 
 describe('IniSection', function() {
     let emptySection, newSection, fakeSection, newLine;

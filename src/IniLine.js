@@ -1,8 +1,8 @@
-const {
+import {
     quotedExpr, lineTypes, commentExpr, lineExpr, reservedWords
-} = require('./helpers');
+} from './helpers.js';
 
-class IniLine {
+export default class IniLine {
     static _parse(str) {
         let value = '', comment = '', esc = false, inComment = false,
             quoted = str.match(quotedExpr), out = !quoted,
@@ -125,5 +125,3 @@ class IniLine {
         this._parseLine();
     }
 }
-
-module.exports = IniLine;

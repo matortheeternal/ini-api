@@ -1,7 +1,7 @@
-const {sectionExpr} = require('./helpers');
-const IniLine = require('./IniLine');
+import { sectionExpr } from './helpers.js';
+import IniLine from './IniLine.js';
 
-class IniSection {
+export default class IniSection {
     constructor(text = '') {
         this.lines = [];
         if (typeof text !== 'string')
@@ -65,5 +65,3 @@ class IniSection {
         return arrayLines;
     }
 }
-
-module.exports = IniSection;

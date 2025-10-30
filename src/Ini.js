@@ -1,9 +1,9 @@
-const {
+import {
     lineTypes, systemLineBreak, isBlankLine, isCommentLine, isSectionLine
-} = require('./helpers');
-const IniSection = require('./IniSection');
+} from './helpers.js';
+import IniSection from './IniSection.js';
 
-class Ini {
+export default class Ini {
     static merge(...inis) {
         let mergeLines = (section, newSection) => {
             let arrayKeys = [];
@@ -98,5 +98,3 @@ class Ini {
         return str;
     }
 }
-
-module.exports = Ini;
